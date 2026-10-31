@@ -93,6 +93,38 @@ export default function App() {
   const [isCallingApi, setIsCallingApi] = useState<boolean>(false);
   const [copiedFhir, setCopiedFhir] = useState<boolean>(false);
 
+  // 10. Judge 30-Second Quick-Tour State & Handlers
+  const [judgeStep, setJudgeStep] = useState<number>(0);
+
+  const handleJudgeTourStep1 = () => {
+    handleSelectPreset('martha_v');
+    setActiveTab(0);
+    setJudgeStep(1);
+  };
+
+  const handleJudgeTourStep2 = () => {
+    handleSelectPreset('martha_v');
+    setActiveTab(0);
+    handleRunSimulation(PATIENT_PRESETS[0].simulationButtons[0]);
+    setJudgeStep(2);
+    setTimeout(() => {
+      const el = document.getElementById('washout-section');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 150);
+  };
+
+  const handleJudgeTourStep3 = () => {
+    setActiveTab(2);
+    const results = runAll15ClinicalUnitTests();
+    setTestResults(results);
+    setHasRunTests(true);
+    setJudgeStep(3);
+    setTimeout(() => {
+      const el = document.getElementById('unit-tests-section');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 150);
+  };
+
   // Reset workspace when preset card is clicked
   const handleSelectPreset = (presetId: string) => {
     setSelectedPresetId(presetId);
@@ -580,6 +612,56 @@ export default function App() {
       </header>
 
       {/* ======================================================== */}
+      {/* 🎯 JUDGE 30-SECOND INTERACTIVE WALKTHROUGH RIBBON */}
+      {/* ======================================================== */}
+      <section className="no-print bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border-b border-indigo-800 text-white py-2.5 px-4 shadow-inner">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center space-x-2">
+            <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="font-extrabold text-xs uppercase tracking-wider text-indigo-300">
+              🎯 Judge 30-Second Interactive Walkthrough:
+            </span>
+          </div>
+          <div className="flex items-center space-x-2 flex-wrap gap-2">
+            <button
+              onClick={handleJudgeTourStep1}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 border ${
+                judgeStep === 1
+                  ? 'bg-blue-600 text-white border-blue-400 ring-2 ring-blue-400/40 shadow-md'
+                  : 'bg-slate-800/80 hover:bg-slate-800 text-slate-200 border-slate-700'
+              }`}
+            >
+              <span>① 1. Inspect 4-Drug Domino Cascade</span>
+            </button>
+
+            <button
+              onClick={handleJudgeTourStep2}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 border ${
+                judgeStep === 2
+                  ? 'bg-emerald-600 text-white border-emerald-400 ring-2 ring-emerald-400/40 shadow-md'
+                  : 'bg-emerald-950/70 hover:bg-emerald-900 text-emerald-300 border-emerald-800'
+              }`}
+            >
+              <Scissors className="w-3.5 h-3.5" />
+              <span>② 2. Simulate Root Switch (PHI 92 → 12)</span>
+            </button>
+
+            <button
+              onClick={handleJudgeTourStep3}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 border ${
+                judgeStep === 3
+                  ? 'bg-purple-600 text-white border-purple-400 ring-2 ring-purple-400/40 shadow-md'
+                  : 'bg-purple-950/70 hover:bg-purple-900 text-purple-300 border-purple-800'
+              }`}
+            >
+              <Shield className="w-3.5 h-3.5" />
+              <span>③ 3. Verify 15/15 Unit Tests &amp; FHIR R4</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ======================================================== */}
       {/* 2. HERO KPI ROW WITH BEFORE/AFTER DELTAS (Screen-Only) */}
       {/* ======================================================== */}
       <section className="no-print max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-2">
@@ -992,6 +1074,26 @@ export default function App() {
                           markerEnd={isSevered ? 'url(#arrow-green)' : 'url(#arrow-red)'}
                           className="transition-all duration-300"
                         />
+                        {/* Animated SVG Pulse Particle Stream along Active Cascades */}
+                        {!isSevered && (
+                          <g>
+                            <circle r="4.5" fill="#EF4444" opacity="0.9" filter="drop-shadow(0 0 4px #DC2626)">
+                              <animateMotion
+                                dur="2.4s"
+                                repeatCount="indefinite"
+                                path={`M ${x1} ${y1} C ${x1 + 60} ${y1 - 30}, ${x2 - 60} ${y2 - 30}, ${x2} ${y2}`}
+                              />
+                            </circle>
+                            <circle r="2.5" fill="#FCA5A5" opacity="0.8">
+                              <animateMotion
+                                dur="2.4s"
+                                begin="1.2s"
+                                repeatCount="indefinite"
+                                path={`M ${x1} ${y1} C ${x1 + 60} ${y1 - 30}, ${x2 - 60} ${y2 - 30}, ${x2} ${y2}`}
+                              />
+                            </circle>
+                          </g>
+                        )}
                         {/* Interactive Metric Edge Pill */}
                         <g transform={`translate(${midX - 55}, ${midY - 12})`}>
                           <rect
@@ -1165,7 +1267,7 @@ export default function App() {
             </div>
 
             {/* Pharmacokinetic Plasma Washout & 4-Step Taper Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div id="washout-section" className="grid grid-cols-1 lg:grid-cols-2 gap-6 scroll-mt-24">
               {/* 5-Half-Life PK Washout SVG Plotter */}
               <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
                 <div className="flex items-center justify-between mb-3">
@@ -1535,7 +1637,7 @@ export default function App() {
         {activeTab === 2 && (
           <div className="space-y-6">
             {/* 15 Automated Clinical Unit Tests Runner */}
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <div id="unit-tests-section" className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm scroll-mt-24">
               <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                 <div>
                   <h3 className="font-bold text-base text-slate-900 flex items-center space-x-2">

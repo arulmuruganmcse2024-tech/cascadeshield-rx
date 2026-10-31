@@ -323,3 +323,4 @@ export function downloadFhirBundleJson(bundle: FhirBundle, filename = 'cascadesh
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
+

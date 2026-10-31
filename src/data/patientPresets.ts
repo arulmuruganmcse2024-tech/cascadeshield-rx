@@ -394,3 +394,4 @@ Day 18 Discharge: Prescribed Imodium 2 mg TID for diarrhea.
 Day 18 Discharge: Prescribed Toprol-XL 100 mg daily (duplicate beta-blocker with home Lopressor!).`
   }
 ];
+

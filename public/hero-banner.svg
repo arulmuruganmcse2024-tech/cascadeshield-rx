@@ -1,0 +1,183 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 380" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradients -->
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B0F19" />
+      <stop offset="50%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+
+    <!-- Glowing Accents -->
+    <linearGradient id="primary-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3B82F6" />
+      <stop offset="50%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#8B5CF6" />
+    </linearGradient>
+
+    <linearGradient id="red-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#EF4444" />
+      <stop offset="100%" stop-color="#DC2626" />
+    </linearGradient>
+
+    <linearGradient id="emerald-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+
+    <!-- Node Gradient Backgrounds -->
+    <linearGradient id="node-base" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+
+    <!-- Drop Shadows -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.5" />
+    </filter>
+
+    <filter id="glow-emerald" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#10B981" flood-opacity="0.4" />
+    </filter>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#EF4444" />
+    </marker>
+  </defs>
+
+  <!-- Background Base Canvas -->
+  <rect width="1200" height="380" fill="url(#bg-grad)" rx="16" />
+  
+  <!-- Subtle Technical Grid Lines -->
+  <g opacity="0.1" stroke="#94A3B8" stroke-width="1">
+    <line x1="0" y1="95" x2="1200" y2="95" stroke-dasharray="4 4" />
+    <line x1="0" y1="190" x2="1200" y2="190" stroke-dasharray="4 4" />
+    <line x1="0" y1="285" x2="1200" y2="285" stroke-dasharray="4 4" />
+    <line x1="300" y1="0" x2="300" y2="380" stroke-dasharray="4 4" />
+    <line x1="600" y1="0" x2="600" y2="380" stroke-dasharray="4 4" />
+    <line x1="900" y1="0" x2="900" y2="380" stroke-dasharray="4 4" />
+  </g>
+
+  <!-- Ambient Light Orbs -->
+  <circle cx="200" cy="80" r="140" fill="#3B82F6" opacity="0.08" filter="blur(60px)" />
+  <circle cx="1050" cy="280" r="160" fill="#10B981" opacity="0.1" filter="blur(70px)" />
+  <circle cx="650" cy="220" r="120" fill="#EF4444" opacity="0.08" filter="blur(60px)" />
+
+  <!-- TOP HEADER SECTION -->
+  <g transform="translate(48, 48)">
+    <!-- Security Shield Brand Icon -->
+    <rect x="0" y="0" width="48" height="48" rx="12" fill="url(#primary-glow)" filter="url(#shadow)" />
+    <path d="M 24 10 L 36 15 L 36 25 C 36 32 24 38 24 38 C 24 38 12 32 12 25 L 12 15 Z" fill="#FFFFFF" opacity="0.9" />
+    <path d="M 24 16 L 24 32" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M 18 24 L 30 24" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" />
+
+    <!-- Main Title -->
+    <text x="64" y="24" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="24" fill="#FFFFFF" letter-spacing="-0.5">
+      CascadeShield <tspan fill="#38BDF8">Rx</tspan>
+      <tspan font-size="16" font-weight="600" fill="#94A3B8"> — Clinical Pharmacotherapy &amp; Prescribing Cascade Intelligence</tspan>
+    </text>
+
+    <!-- Standards & Subtitle -->
+    <text x="64" y="44" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="500" font-size="13" fill="#64748B">
+      Chronological Cascade DAG • 5-Half-Life PK Washout • 2023/2025 AGS Beers &amp; STOPP/START v3 • HL7 FHIR R4
+    </text>
+
+    <!-- Badges on Right -->
+    <g transform="translate(920, 4)">
+      <rect x="0" y="0" width="180" height="28" rx="14" fill="#1E293B" stroke="#334155" stroke-width="1" />
+      <circle cx="16" cy="14" r="5" fill="#10B981" />
+      <text x="30" y="19" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="700" font-size="11" fill="#E2E8F0">15/15 UNIT TESTS PASS</text>
+    </g>
+  </g>
+
+  <!-- MIDDLE SECTION: THE 4-DRUG DOMINO CASCADE DIAGRAM -->
+  <g transform="translate(48, 140)">
+    <!-- Cascade Connecting Directed Edges -->
+    <!-- Edge 1: Amlodipine -> Furosemide -->
+    <path d="M 170 50 C 190 20, 220 20, 240 50" fill="none" stroke="#EF4444" stroke-width="2.5" marker-end="url(#arrow)" stroke-dasharray="3 3" />
+    <rect x="180" y="8" width="96" height="20" rx="10" fill="#450A0A" stroke="#DC2626" stroke-width="1" />
+    <text x="228" y="22" text-anchor="middle" font-family="monospace" font-weight="700" font-size="9" fill="#FCA5A5">Δt=24d | aSR=1.93</text>
+
+    <!-- Edge 2: Furosemide -> Oxybutynin -->
+    <path d="M 390 50 C 410 20, 440 20, 460 50" fill="none" stroke="#EF4444" stroke-width="2.5" marker-end="url(#arrow)" stroke-dasharray="3 3" />
+    <rect x="400" y="8" width="86" height="20" rx="10" fill="#450A0A" stroke="#DC2626" stroke-width="1" />
+    <text x="443" y="22" text-anchor="middle" font-family="monospace" font-weight="700" font-size="9" fill="#FCA5A5">Δt=28d | Urgency</text>
+
+    <!-- Edge 3: Oxybutynin -> Donepezil -->
+    <path d="M 610 50 C 630 20, 660 20, 680 50" fill="none" stroke="#EF4444" stroke-width="2.5" marker-end="url(#arrow)" stroke-dasharray="3 3" />
+    <rect x="620" y="8" width="86" height="20" rx="10" fill="#450A0A" stroke="#DC2626" stroke-width="1" />
+    <text x="663" y="22" text-anchor="middle" font-family="monospace" font-weight="700" font-size="9" fill="#FCA5A5">Δt=33d | OR=2.63</text>
+
+    <!-- NODE 1: Day 0: Amlodipine 10mg (Root Drug) -->
+    <g transform="translate(0, 40)" filter="url(#shadow)">
+      <rect width="170" height="84" rx="12" fill="url(#node-base)" stroke="#38BDF8" stroke-width="2" />
+      <rect x="12" y="12" width="54" height="18" rx="6" fill="#0369A1" />
+      <text x="39" y="25" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="10" fill="#FFFFFF">DAY 0</text>
+      <text x="12" y="48" font-family="sans-serif" font-weight="800" font-size="14" fill="#FFFFFF">Amlodipine 10mg</text>
+      <text x="12" y="66" font-family="sans-serif" font-weight="500" font-size="11" fill="#94A3B8">Baseline Norvasc • CCB</text>
+      <text x="12" y="80" font-family="sans-serif" font-weight="700" font-size="10" fill="#F87171">Side Effect: Pedal Edema</text>
+    </g>
+
+    <!-- NODE 2: Day 24: Furosemide 40mg -->
+    <g transform="translate(220, 40)" filter="url(#shadow)">
+      <rect width="170" height="84" rx="12" fill="url(#node-base)" stroke="#F87171" stroke-width="2" />
+      <rect x="12" y="12" width="60" height="18" rx="6" fill="#991B1B" />
+      <text x="42" y="25" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="10" fill="#FFFFFF">DAY 24</text>
+      <text x="12" y="48" font-family="sans-serif" font-weight="800" font-size="14" fill="#FFFFFF">Furosemide 40mg</text>
+      <text x="12" y="66" font-family="sans-serif" font-weight="500" font-size="11" fill="#94A3B8">Lasix Loop Diuretic (ACB=1)</text>
+      <text x="12" y="80" font-family="sans-serif" font-weight="700" font-size="10" fill="#F87171">Iatrogenic Bladder Leakage</text>
+    </g>
+
+    <!-- NODE 3: Day 52: Oxybutynin 10mg -->
+    <g transform="translate(440, 40)" filter="url(#shadow)">
+      <rect width="170" height="84" rx="12" fill="url(#node-base)" stroke="#EF4444" stroke-width="2" />
+      <rect x="12" y="12" width="60" height="18" rx="6" fill="#7F1D1D" />
+      <text x="42" y="25" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="10" fill="#FFFFFF">DAY 52</text>
+      <text x="12" y="48" font-family="sans-serif" font-weight="800" font-size="14" fill="#FFFFFF">Oxybutynin 10mg</text>
+      <text x="12" y="66" font-family="sans-serif" font-weight="700" font-size="11" fill="#C084FC">Antimuscarinic (ACB=3)</text>
+      <text x="12" y="80" font-family="sans-serif" font-weight="700" font-size="10" fill="#F87171">Central Brain Fog &amp; Memory</text>
+    </g>
+
+    <!-- NODE 4: Day 85: Donepezil 5mg -->
+    <g transform="translate(660, 40)" filter="url(#shadow)">
+      <rect width="170" height="84" rx="12" fill="url(#node-base)" stroke="#DC2626" stroke-width="2" />
+      <rect x="12" y="12" width="60" height="18" rx="6" fill="#450A0A" />
+      <text x="42" y="25" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="10" fill="#FFFFFF">DAY 85</text>
+      <text x="12" y="48" font-family="sans-serif" font-weight="800" font-size="14" fill="#FFFFFF">Donepezil 5mg</text>
+      <text x="12" y="66" font-family="sans-serif" font-weight="500" font-size="11" fill="#94A3B8">Aricept (AChEI Cascade)</text>
+      <text x="12" y="80" font-family="sans-serif" font-weight="700" font-size="10" fill="#F87171">Precipitates Insomnia &amp; Z-Drug</text>
+    </g>
+  </g>
+
+  <!-- RIGHT CALLOUT: GREEN SURGICAL CUT & CLINICAL RESOLUTION -->
+  <g transform="translate(915, 170)" filter="url(#shadow)">
+    <!-- Card Frame -->
+    <rect width="235" height="150" rx="14" fill="#064E3B" stroke="#10B981" stroke-width="2" filter="url(#glow-emerald)" />
+    
+    <!-- Header Pill -->
+    <rect x="16" y="14" width="130" height="22" rx="11" fill="#047857" />
+    <text x="26" y="29" font-family="sans-serif" font-weight="800" font-size="11" fill="#ECFDF5">✂️ ROOT SUBSTITUTION</text>
+
+    <!-- Main Switch Text -->
+    <text x="16" y="58" font-family="sans-serif" font-weight="800" font-size="14" fill="#FFFFFF">Amlodipine → Losartan</text>
+    <text x="16" y="74" font-family="sans-serif" font-weight="600" font-size="11" fill="#A7F3D0">ARB Switch (50 mg daily)</text>
+
+    <!-- Key Metrics Delta Box -->
+    <g transform="translate(16, 88)">
+      <rect width="203" height="46" rx="8" fill="#022C22" stroke="#059669" stroke-width="1" />
+      <text x="10" y="18" font-family="sans-serif" font-weight="700" font-size="10" fill="#34D399">PHI HARM INDEX: 92 → 12 (-80)</text>
+      <text x="10" y="32" font-family="sans-serif" font-weight="700" font-size="10" fill="#6EE7B7">ACB BURDEN: 4 → 0 (Dementia Safe)</text>
+      <text x="10" y="44" font-family="sans-serif" font-weight="800" font-size="10" fill="#FDE047">$4,800 Preventable ADE Cost Saved</text>
+    </g>
+  </g>
+
+  <!-- BOTTOM STATUS FOOTER -->
+  <g transform="translate(48, 335)">
+    <text x="0" y="18" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="600" font-size="12" fill="#64748B">
+      <tspan fill="#38BDF8">●</tspan> BMJ Sept 2026 Cohort (N=2.3M)   
+      <tspan fill="#38BDF8">●</tspan> ThinkCascades Consensus (80-90%)   
+      <tspan fill="#38BDF8">●</tspan> Cochrane Dementia OR 2.63   
+      <tspan fill="#38BDF8">●</tspan> AHRQ $4.8K ADE Avoidance   
+      <tspan fill="#38BDF8">●</tspan> HL7 FHIR R4 US-Core
+    </text>
+  </g>
+</svg>
