@@ -26,7 +26,9 @@ import {
   Server,
   Database,
   Globe,
-  Lock
+  Lock,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 
 import {
@@ -81,6 +83,8 @@ export default function App() {
   const [simStep, setSimStep] = useState<number>(0); // 0: baseline, 1: step 1, 2: step 2
   const [severedEdgeIds, setSeveredEdgeIds] = useState<string[]>([]);
   const [activeWashoutDrug, setActiveWashoutDrug] = useState<string>('oxybutynin');
+  const [showAdvancedMetrics, setShowAdvancedMetrics] = useState<boolean>(false);
+  const [showPkDetails, setShowPkDetails] = useState<boolean>(false);
 
   // 6. Federal Evidence Inspector State
   const [inspectorDrug, setInspectorDrug] = useState<string>('amlodipine');
@@ -643,35 +647,6 @@ export default function App() {
             </button>
           </div>
         </div>
-
-        {/* Clinical Standards & Live Full-Stack API Telemetry Sub-bar */}
-        <div className="bg-slate-100 border-t border-slate-200 px-4 py-1.5 flex items-center justify-between text-[11px] text-slate-500 overflow-x-auto gap-3">
-          <div className="flex items-center space-x-2 sm:space-x-3 flex-wrap">
-            <span className="font-semibold text-slate-700">Standards:</span>
-            <span className="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-700">2026 BMJ PIPC</span>
-            <span className="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-700">2025 ThinkCascades</span>
-            <span className="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-700">2023 AGS Beers Criteria</span>
-            <span className="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-700">2025 AGS Alternatives</span>
-            <span className="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-700">STOPP/START v3</span>
-            <span className="px-1.5 py-0.5 rounded bg-white border border-slate-300 text-slate-700">HL7 FHIR R4</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => {
-                setActiveTab(2);
-                setTimeout(() => {
-                  const el = document.getElementById('backend-api-section');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }, 150);
-              }}
-              className="flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-[11px] font-bold border border-emerald-300 transition-all cursor-pointer shadow-xs whitespace-nowrap"
-              title="Click to view Full-Stack Node.js REST API & US Federal Live Telemetry Console"
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Full-Stack REST Backend &amp; Telemetry: Online (SHA-256 Signed)</span>
-            </button>
-          </div>
-        </div>
       </header>
 
       {/* ======================================================== */}
@@ -682,24 +657,24 @@ export default function App() {
           <div className="flex items-center space-x-2">
             <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
             <span className="font-extrabold text-xs uppercase tracking-wider text-indigo-300">
-              Clinical Evaluation Protocol (3-Step Walkthrough):
+              Clinical Evaluation Protocol:
             </span>
           </div>
           <div className="flex items-center space-x-2 flex-wrap gap-2">
             <button
               onClick={handleJudgeTourStep1}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 border ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 border cursor-pointer ${
                 judgeStep === 1
                   ? 'bg-blue-600 text-white border-blue-400 ring-2 ring-blue-400/40 shadow-md'
                   : 'bg-slate-800/80 hover:bg-slate-800 text-slate-200 border-slate-700'
               }`}
             >
-              <span>① 1. Inspect 4-Drug Domino Cascade</span>
+              <span>① 1. Inspect Baseline Cascade</span>
             </button>
 
             <button
               onClick={handleJudgeTourStep2}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 border ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 border cursor-pointer ${
                 judgeStep === 2
                   ? 'bg-emerald-600 text-white border-emerald-400 ring-2 ring-emerald-400/40 shadow-md'
                   : 'bg-emerald-950/70 hover:bg-emerald-900 text-emerald-300 border-emerald-800'
@@ -711,7 +686,7 @@ export default function App() {
 
             <button
               onClick={handleJudgeTourStep3}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 border ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1.5 border cursor-pointer ${
                 judgeStep === 3
                   ? 'bg-purple-600 text-white border-purple-400 ring-2 ring-purple-400/40 shadow-md'
                   : 'bg-purple-950/70 hover:bg-purple-900 text-purple-300 border-purple-800'
@@ -728,16 +703,16 @@ export default function App() {
       {/* 2. HERO KPI ROW WITH BEFORE/AFTER DELTAS (Screen-Only) */}
       {/* ======================================================== */}
       <section className="no-print max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-2">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* KPI 1: Polypharmacy Harm Index (PHI) */}
-          <div className="col-span-2 md:col-span-1 bg-white p-4 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm relative overflow-hidden">
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Harm Index (PHI)</span>
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Patient Harm Risk (PHI)</span>
               <Activity className="w-4 h-4 text-blue-600" />
             </div>
             <div className="flex items-baseline space-x-2">
               <span
-                className={`text-3xl font-extrabold ${
+                className={`text-4xl font-black ${
                   analysis.phi >= 70
                     ? 'text-red-600'
                     : analysis.phi >= 40
@@ -747,15 +722,15 @@ export default function App() {
               >
                 {analysis.phi}
               </span>
-              <span className="text-xs text-slate-400">/ 100</span>
+              <span className="text-xs text-slate-400 font-semibold">/ 100</span>
               {simStep > 0 && baselineAnalysis.phi !== analysis.phi && (
-                <span className="text-xs font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">
-                  ↓ {baselineAnalysis.phi - analysis.phi}
+                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+                  ↓ {baselineAnalysis.phi - analysis.phi} pts avoided
                 </span>
               )}
             </div>
-            <div className="mt-2 text-[11px] text-slate-500 flex items-center justify-between">
-              <span>Risk Tier:</span>
+            <div className="mt-2 text-xs text-slate-500 flex items-center justify-between">
+              <span>Current Status:</span>
               <span
                 className={`font-bold ${
                   analysis.phi >= 70
@@ -771,96 +746,107 @@ export default function App() {
           </div>
 
           {/* KPI 2: Prescribing Cascade Edges */}
-          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Cascades</span>
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Prescribing Cascades</span>
               <AlertTriangle className="w-4 h-4 text-red-500" />
             </div>
             <div className="flex items-baseline space-x-2">
-              <span className="text-3xl font-extrabold text-slate-900">{analysis.cascades.length}</span>
-              <span className="text-xs text-slate-400">chains</span>
+              <span className="text-4xl font-black text-slate-900">{analysis.cascades.length}</span>
+              <span className="text-xs text-slate-400 font-semibold">Active Chain{analysis.cascades.length === 1 ? '' : 's'}</span>
               {simStep > 0 && baselineAnalysis.cascades.length !== analysis.cascades.length && (
-                <span className="text-xs font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">
-                  ↓ {baselineAnalysis.cascades.length - analysis.cascades.length}
+                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+                  ↓ {baselineAnalysis.cascades.length - analysis.cascades.length} Severed
                 </span>
               )}
             </div>
-            <p className="mt-2 text-[11px] text-slate-500 truncate">
-              {analysis.cascades.length > 0 ? `${analysis.cascades[0].toMed.displayName}` : 'No active cascades'}
+            <p className="mt-2 text-xs text-slate-500 truncate">
+              {analysis.cascades.length > 0 ? `${analysis.cascades[0].fromMed.displayName} → ${analysis.cascades[0].toMed.displayName}` : 'All pathological cascades resolved'}
             </p>
           </div>
 
-          {/* KPI 3: Anticholinergic Burden (ACB) */}
-          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          {/* KPI 3: Anticholinergic Cognitive Burden (ACB) */}
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">ACB Burden</span>
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Cognitive Burden (ACB)</span>
               <Pill className="w-4 h-4 text-purple-600" />
             </div>
             <div className="flex items-baseline space-x-2">
               <span
-                className={`text-3xl font-extrabold ${
+                className={`text-4xl font-black ${
                   analysis.acbTotal >= 3 ? 'text-red-600' : analysis.acbTotal > 0 ? 'text-amber-600' : 'text-slate-900'
                 }`}
               >
                 {analysis.acbTotal}
               </span>
-              <span className="text-xs text-slate-400">pts</span>
+              <span className="text-xs text-slate-400 font-semibold">Points</span>
               {simStep > 0 && baselineAnalysis.acbTotal !== analysis.acbTotal && (
-                <span className="text-xs font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">
-                  ↓ {baselineAnalysis.acbTotal - analysis.acbTotal}
+                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+                  ↓ {baselineAnalysis.acbTotal - analysis.acbTotal} pts
                 </span>
               )}
             </div>
-            <div className="mt-2 text-[11px]">
+            <div className="mt-2 text-xs">
               {analysis.acbTotal >= 3 ? (
-                <span className="text-red-700 font-bold">Dementia OR = 2.63</span>
+                <span className="text-red-700 font-bold">Severe Dementia Risk (OR = 2.63)</span>
               ) : (
-                <span className="text-slate-500">Boustani Cognitive Scale</span>
+                <span className="text-emerald-700 font-semibold">Cognitive Burden Low / Protected</span>
               )}
-            </div>
-          </div>
-
-          {/* KPI 4: Drug Burden Index (DBI) */}
-          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Drug Burden (DBI)</span>
-              <Layers className="w-4 h-4 text-indigo-600" />
-            </div>
-            <div className="flex items-baseline space-x-2">
-              <span className="text-3xl font-extrabold text-slate-900">{analysis.dbiTotal}</span>
-              {simStep > 0 && baselineAnalysis.dbiTotal !== analysis.dbiTotal && (
-                <span className="text-xs font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">
-                  ↓ {(baselineAnalysis.dbiTotal - analysis.dbiTotal).toFixed(2)}
-                </span>
-              )}
-            </div>
-            <p className="mt-2 text-[11px] text-slate-500">Dose-Weighted Sedative Index</p>
-          </div>
-
-          {/* KPI 5: Renal Safety & Discharge Reconciliation */}
-          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Renal & Safety</span>
-              <HeartPulse className="w-4 h-4 text-emerald-600" />
-            </div>
-            <div className="flex items-baseline space-x-1">
-              <span className="text-2xl font-extrabold text-slate-900">{analysis.crcl}</span>
-              <span className="text-xs text-slate-500">mL/min</span>
-            </div>
-            <div className="mt-2 text-[11px] text-slate-500 flex items-center justify-between">
-              <span>Alerts:</span>
-              <span
-                className={`font-semibold ${
-                  analysis.renalAlerts.length + analysis.reconciliations.length > 0
-                    ? 'text-red-700'
-                    : 'text-emerald-700'
-                }`}
-              >
-                {analysis.renalAlerts.length + analysis.reconciliations.length} issues
-              </span>
             </div>
           </div>
         </div>
+
+        {/* Advanced Pharmacology Metrics Toggle */}
+        <div className="mt-2 flex justify-end">
+          <button
+            onClick={() => setShowAdvancedMetrics(!showAdvancedMetrics)}
+            className="text-xs text-slate-500 hover:text-slate-800 font-semibold flex items-center space-x-1.5 py-1 px-2.5 rounded-lg hover:bg-slate-100 transition-all cursor-pointer"
+          >
+            <Sliders className="w-3.5 h-3.5 text-slate-400" />
+            <span>{showAdvancedMetrics ? 'Hide Advanced Pharmacology Metrics' : 'Show Advanced Renal & Sedative Metrics (CrCl, DBI)'}</span>
+            {showAdvancedMetrics ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+          </button>
+        </div>
+
+        {/* Collapsible Advanced Metrics: Renal CrCl & Sedative DBI */}
+        {showAdvancedMetrics && (
+          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in duration-300">
+            {/* KPI 4: Cockcroft-Gault Renal Safety */}
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">Cockcroft-Gault Clearance (CrCl)</span>
+                <HeartPulse className="w-4 h-4 text-emerald-600" />
+              </div>
+              <div className="flex items-baseline space-x-2">
+                <span className="text-2xl font-black text-slate-900">{analysis.crcl}</span>
+                <span className="text-xs text-slate-500">mL/min</span>
+                <span className="text-[11px] text-slate-500 font-mono">
+                  (SCr {vitals.serumCreatinineMgDl} mg/dL • Sarcopenia Clamped)
+                </span>
+              </div>
+              <p className="mt-2 text-xs text-slate-600">
+                {analysis.renalAlerts.length > 0
+                  ? `${analysis.renalAlerts.length} active renal contraindications detected`
+                  : 'Renal dosing parameters within target range'}
+              </p>
+            </div>
+
+            {/* KPI 5: Drug Burden Index (DBI) */}
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">Drug Burden Index (DBI)</span>
+                <Layers className="w-4 h-4 text-indigo-600" />
+              </div>
+              <div className="flex items-baseline space-x-2">
+                <span className="text-2xl font-black text-slate-900">{analysis.dbiTotal}</span>
+                <span className="text-xs text-slate-500">Dose-Weighted Sedative Index</span>
+              </div>
+              <p className="mt-2 text-xs text-slate-600">
+                Quantifies cumulative sedative and cholinergic burden across active outpatient medications.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Financial & Economic ADE Avoidance Banner (Triggered upon simulation) */}
         {simStep > 0 && (
@@ -997,64 +983,88 @@ export default function App() {
         {/* ======================================================== */}
         {activeTab === 0 && (
           <div className="space-y-6">
-            {/* Simulation Command Controls */}
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <h3 className="font-bold text-slate-900 flex items-center space-x-2">
-                  <Scissors className="w-4 h-4 text-blue-600" />
-                  <span>Deprescribing & Root Cause Substitution Simulator</span>
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Execute BFS root-cause substitution to sever downstream pathological cascades and model pharmacokinetic washout.
-                </p>
-              </div>
-              <div className="flex items-center space-x-2 flex-wrap gap-2">
-                {activePreset.simulationButtons.map(btn => (
-                  <button
-                    key={btn.id}
-                    onClick={() => handleRunSimulation(btn)}
-                    className="px-4 py-2 rounded-lg text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition-all flex items-center space-x-1.5"
-                  >
-                    <span>{btn.label}</span>
-                  </button>
-                ))}
-                {simStep > 0 && (
-                  <button
-                    onClick={handleResetSimulation}
-                    className="px-3 py-2 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 transition-all flex items-center space-x-1"
-                  >
-                    <RefreshCw className="w-3.5 h-3.5 text-slate-600" />
-                    <span>Revert Baseline</span>
-                  </button>
-                )}
+            {/* HERO CLINICAL SIMULATION ACTION CENTER (Primary Screen Focal Point) */}
+            <div id="simulation-command-center" className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-6 rounded-2xl border border-indigo-700/60 shadow-xl text-white">
+              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
+                <div className="space-y-2 max-w-3xl">
+                  <div className="flex items-center space-x-2">
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30 flex items-center space-x-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                      <span>Primary Clinical Intervention</span>
+                    </span>
+                    <span className="text-xs text-indigo-300 font-mono">
+                      Patient: {activePreset.name} (CrCl {analysis.crcl} mL/min)
+                    </span>
+                  </div>
+                  <h3 className="text-lg md:text-xl font-black text-white tracking-tight">
+                    {simStep === 0
+                      ? activePreset.id === 'martha_v'
+                        ? 'Root-Cause Prescribing Cascade: Amlodipine pedal edema misdiagnosed as heart failure.'
+                        : activePreset.id === 'arthur_k'
+                        ? 'High-Risk Cascade & Renal Contraindications: Statin myalgia misdiagnosed + Baclofen toxicity.'
+                        : 'Hospital Discharge Discrepancies & Accidental Laxative Cascade.'
+                      : 'Counterfactual Root Deprescribing Executed: Downstream Cascades Severed.'}
+                  </h3>
+                  <p className="text-xs md:text-sm text-slate-300 leading-relaxed">
+                    {simStep === 0
+                      ? activePreset.id === 'martha_v'
+                        ? 'Amlodipine (Day 0) caused pedal edema → Furosemide (Day 24) → Urinary Incontinence → Oxybutynin (Day 52, ACB=3) → Cognitive Decline → Donepezil (Day 85) & Zolpidem. Severing the root drug breaks all downstream cascading pills and protects Martha from cognitive decline.'
+                        : activePreset.id === 'arthur_k'
+                        ? 'Atorvastatin caused myalgia → Naproxen → Hypertension → Amlodipine. Baclofen and Ciprofloxacin are contraindicated at CrCl 24.9 mL/min. Substituting to pravastatin and adjusting renal dosing eliminates toxicity.'
+                        : 'Identified duplicate Lopressor and omitted Jardiance across inpatient transition. Discontinue duplicate beta-blocker, restart SGLT2i, and switch to alternate-day iron dosing.'
+                      : 'Breadth-First Search (BFS) eliminated the pathological cascade chain. Downstream prescribing cascade edges severed, dropping Harm Index from ' + baselineAnalysis.phi + ' down to ' + analysis.phi + ' (Safe / Optimized).'}
+                  </p>
+                </div>
+
+                {/* Primary Action Button */}
+                <div className="shrink-0 flex items-center space-x-3 w-full lg:w-auto justify-end">
+                  {simStep === 0 ? (
+                    <button
+                      onClick={() => handleRunSimulation(activePreset.simulationButtons[0])}
+                      className="w-full lg:w-auto px-6 py-3.5 rounded-xl font-black text-xs md:text-sm bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 shadow-lg shadow-emerald-500/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center space-x-2 cursor-pointer"
+                    >
+                      <Scissors className="w-4 h-4 text-slate-950" />
+                      <span>{activePreset.simulationButtons[0]?.label || 'Simulate Root Switch'}</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleResetSimulation}
+                      className="px-5 py-3 rounded-xl font-bold text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 transition-all flex items-center space-x-2 cursor-pointer"
+                    >
+                      <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
+                      <span>Revert to Baseline Cascade</span>
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
 
-            {/* Interactive SVG Causal Time-Graph */}
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
+            {/* Interactive SVG Causal Time-Graph (Modernized High-Contrast Canvas) */}
+            <div id="causal-dag-section" className="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-2xl text-white">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-4 border-b border-slate-800/80 pb-3">
                 <div>
-                  <h3 className="font-bold text-base text-slate-900">
-                    Causal Prescribing Timeline & Directed Acyclic Graph (DAG)
+                  <h3 className="font-bold text-base text-white flex items-center space-x-2">
+                    <Activity className="w-4 h-4 text-cyan-400" />
+                    <span>Causal Prescribing Timeline &amp; Directed Acyclic Graph (DAG)</span>
                   </h3>
-                  <p className="text-xs text-slate-500">
-                    X-axis: Chronological timeline (Days from baseline). Y-axis: Staggered cascade hierarchy with animated Bezier confidence vectors.
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    X-axis: Inpatient/outpatient timeline (Days from baseline). Y-axis: Chronological drug sequence with confidence vectors.
                   </p>
                 </div>
-                <div className="flex items-center space-x-3 text-xs">
-                  <span className="flex items-center space-x-1 text-red-600 font-semibold">
-                    <span className="w-2.5 h-2.5 rounded-full bg-red-600 inline-block"></span>
+                <div className="flex items-center space-x-4 text-xs font-semibold">
+                  <span className="flex items-center space-x-1.5 text-red-400">
+                    <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block shadow-sm shadow-red-500/50"></span>
                     <span>Pathological Cascade</span>
                   </span>
-                  <span className="flex items-center space-x-1 text-emerald-600 font-semibold">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span>
+                  <span className="flex items-center space-x-1.5 text-emerald-400">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block shadow-sm shadow-emerald-500/50"></span>
                     <span>Severed / Deprescribed</span>
                   </span>
                 </div>
               </div>
 
               {/* Native SVG Visualization Area */}
-              <div className="overflow-x-auto border border-slate-100 rounded-lg p-2 bg-slate-50/50">
+              <div className="overflow-x-auto border border-slate-800/60 rounded-xl p-2 bg-[#090D16]">
                 <svg
                   viewBox="0 0 1000 380"
                   className="w-full min-w-[850px] h-auto select-none"
@@ -1070,7 +1080,7 @@ export default function App() {
                       markerHeight="6"
                       orient="auto-start-reverse"
                     >
-                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#DC2626" />
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#EF4444" />
                     </marker>
                     <marker
                       id="arrow-green"
@@ -1081,7 +1091,7 @@ export default function App() {
                       markerHeight="6"
                       orient="auto-start-reverse"
                     >
-                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#059669" />
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#10B981" />
                     </marker>
                     <linearGradient id="grad-severed" x1="0%" y1="0%" x2="100%" y2="0%">
                       <stop offset="0%" stopColor="#059669" stopOpacity="0.8" />
@@ -1089,14 +1099,17 @@ export default function App() {
                     </linearGradient>
                   </defs>
 
+                  {/* Dark Canvas Background */}
+                  <rect width="1000" height="380" fill="#090D16" rx="12" />
+
                   {/* Timeline Horizontal Axis Grid Lines */}
-                  <line x1="50" y1="330" x2="950" y2="330" stroke="#CBD5E1" strokeWidth="2" strokeDasharray="4 4" />
+                  <line x1="50" y1="330" x2="950" y2="330" stroke="#334155" strokeWidth="2" strokeDasharray="4 4" />
                   {[0, 20, 40, 60, 80, 100, 120].map(day => {
                     const x = 70 + (day / 120) * 820;
                     return (
                       <g key={day}>
-                        <line x1={x} y1="40" x2={x} y2="335" stroke="#E2E8F0" strokeWidth="1" strokeDasharray="2 2" />
-                        <text x={x} y="350" textAnchor="middle" fontSize="11" fill="#64748B" fontWeight="600">
+                        <line x1={x} y1="40" x2={x} y2="335" stroke="#1E293B" strokeWidth="1" strokeDasharray="2 2" />
+                        <text x={x} y="352" textAnchor="middle" fontSize="11" fill="#94A3B8" fontWeight="700">
                           Day {day}
                         </text>
                       </g>
@@ -1108,13 +1121,13 @@ export default function App() {
                     const fromMed = regimen.find(m => m.id === cascade.fromMed.id) || cascade.fromMed;
                     const toMed = regimen.find(m => m.id === cascade.toMed.id) || cascade.toMed;
 
-                    const x1 = 70 + Math.min(120, fromMed.startDay) / 120 * 820 + 75;
+                    const x1 = 70 + Math.min(120, fromMed.startDay) / 120 * 820 + 80;
                     const y1 = 70 + (idx % 3) * 75;
                     const x2 = 70 + Math.min(120, toMed.startDay) / 120 * 820;
                     const y2 = 70 + ((idx + 1) % 3) * 75;
 
                     const isSevered = severedEdgeIds.includes(cascade.ruleId) || fromMed.isDeprescribed || toMed.isDeprescribed;
-                    const strokeColor = isSevered ? '#059669' : cascade.hasComorbidityConfounder ? '#D97706' : '#DC2626';
+                    const strokeColor = isSevered ? '#10B981' : cascade.hasComorbidityConfounder ? '#F59E0B' : '#EF4444';
 
                     const midX = (x1 + x2) / 2;
                     const midY = (y1 + y2) / 2 - 25;
@@ -1134,14 +1147,14 @@ export default function App() {
                         {/* Animated SVG Pulse Particle Stream along Active Cascades */}
                         {!isSevered && (
                           <g>
-                            <circle r="4.5" fill="#EF4444" opacity="0.9" filter="drop-shadow(0 0 4px #DC2626)">
+                            <circle r="4.5" fill="#EF4444" opacity="0.95" filter="drop-shadow(0 0 6px #EF4444)">
                               <animateMotion
                                 dur="2.4s"
                                 repeatCount="indefinite"
                                 path={`M ${x1} ${y1} C ${x1 + 60} ${y1 - 30}, ${x2 - 60} ${y2 - 30}, ${x2} ${y2}`}
                               />
                             </circle>
-                            <circle r="2.5" fill="#FCA5A5" opacity="0.8">
+                            <circle r="2.5" fill="#FCA5A5" opacity="0.9">
                               <animateMotion
                                 dur="2.4s"
                                 begin="1.2s"
@@ -1152,24 +1165,24 @@ export default function App() {
                           </g>
                         )}
                         {/* Interactive Metric Edge Pill */}
-                        <g transform={`translate(${midX - 55}, ${midY - 12})`}>
+                        <g transform={`translate(${midX - 58}, ${midY - 12})`}>
                           <rect
-                            width="110"
+                            width="116"
                             height="24"
                             rx="12"
-                            fill={isSevered ? '#ECFDF5' : '#FEF2F2'}
+                            fill={isSevered ? '#064E3B' : '#1E1B4B'}
                             stroke={strokeColor}
                             strokeWidth="1.5"
                           />
                           <text
-                            x="55"
+                            x="58"
                             y="16"
                             textAnchor="middle"
                             fontSize="10"
                             fontWeight="bold"
-                            fill={isSevered ? '#065F46' : '#991B1B'}
+                            fill={isSevered ? '#34D399' : '#FCA5A5'}
                           >
-                            {isSevered ? '✂️ SEVERED' : `C = ${cascade.confidence} | Δt = ${cascade.dtDays}d`}
+                            {isSevered ? '✓ SEVERED' : `C = ${cascade.confidence} | Δt = ${cascade.dtDays}d`}
                           </text>
                         </g>
                       </g>
@@ -1197,67 +1210,66 @@ export default function App() {
                         <rect
                           x="0"
                           y="0"
-                          width="160"
-                          height="64"
-                          rx="10"
-                          fill={isDeprescribed ? '#F1F5F9' : '#FFFFFF'}
+                          width="164"
+                          height="66"
+                          rx="12"
+                          fill={isDeprescribed ? '#0B1320' : '#1E293B'}
                           stroke={
                             isDeprescribed
-                              ? '#94A3B8'
+                              ? '#059669'
                               : profile.beersTable2
-                              ? '#DC2626'
+                              ? '#EF4444'
                               : profile.acb > 0
-                              ? '#7C3AED'
-                              : '#2563EB'
+                              ? '#A855F7'
+                              : '#38BDF8'
                           }
                           strokeWidth={isDeprescribed ? '1.5' : '2'}
                           strokeDasharray={isDeprescribed ? '4 3' : 'none'}
-                          filter="drop-shadow(0 2px 4px rgba(0,0,0,0.06))"
-                          opacity={isDeprescribed ? 0.6 : 1}
+                          opacity={isDeprescribed ? 0.75 : 1}
                         />
 
                         {/* Strikethrough line if deprescribed */}
                         {isDeprescribed && (
-                          <line x1="8" y1="32" x2="152" y2="32" stroke="#DC2626" strokeWidth="2.5" />
+                          <line x1="8" y1="33" x2="156" y2="33" stroke="#10B981" strokeWidth="2" strokeDasharray="3 2" />
                         )}
 
                         {/* Drug Name & Brand */}
                         <text
                           x="12"
-                          y="20"
-                          fontSize="11"
+                          y="22"
+                          fontSize="11.5"
                           fontWeight="bold"
-                          fill={isDeprescribed ? '#64748B' : '#0F172A'}
+                          fill={isDeprescribed ? '#94A3B8' : '#FFFFFF'}
                         >
                           {med.displayName.length > 20 ? med.displayName.substring(0, 18) + '...' : med.displayName}
                         </text>
 
                         {/* Dose & Setting */}
-                        <text x="12" y="36" fontSize="10" fill="#64748B">
+                        <text x="12" y="38" fontSize="10" fill="#94A3B8">
                           {med.doseLabel} • Day {med.startDay}
                         </text>
 
                         {/* Status Badges on Node */}
-                        <g transform="translate(12, 44)">
+                        <g transform="translate(12, 46)">
                           {isDeprescribed ? (
-                            <text fontSize="9" fontWeight="bold" fill="#059669">
-                              DEPRESCRIBED
+                            <text fontSize="9.5" fontWeight="bold" fill="#34D399">
+                              ✓ DEPRESCRIBED
                             </text>
                           ) : (
-                            <g className="flex items-center space-x-1">
+                            <g>
                               {profile.acb > 0 && (
-                                <text fontSize="9" fontWeight="bold" fill="#7C3AED">
-                                  ACB={profile.acb}{' '}
+                                <text fontSize="9.5" fontWeight="bold" fill="#C084FC">
+                                  ACB={profile.acb}
                                 </text>
                               )}
                               {profile.beersTable2 && (
-                                <text x="36" fontSize="9" fontWeight="bold" fill="#DC2626">
+                                <text x={profile.acb > 0 ? "42" : "0"} fontSize="9.5" fontWeight="bold" fill="#F87171">
                                   BEERS PIM
                                 </text>
                               )}
                               {!profile.beersTable2 && profile.acb === 0 && (
-                                <text fontSize="9" fill="#059669">
-                                  Safe Profile
+                                <text fontSize="9.5" fill="#38BDF8">
+                                  Index Root Drug
                                 </text>
                               )}
                             </g>
@@ -1269,12 +1281,12 @@ export default function App() {
                           <rect
                             x="-2"
                             y="-2"
-                            width="164"
-                            height="68"
-                            rx="12"
+                            width="168"
+                            height="70"
+                            rx="14"
                             fill="none"
-                            stroke="#2563EB"
-                            strokeWidth="2"
+                            stroke="#38BDF8"
+                            strokeWidth="2.5"
                           />
                         )}
                       </g>
@@ -1311,6 +1323,10 @@ export default function App() {
                         onClick={() => {
                           setActiveWashoutDrug(cascade.toMed.genericName);
                           setInspectorDrug(cascade.fromMed.genericName);
+                          setShowPkDetails(true);
+                          setTimeout(() => {
+                            document.getElementById('washout-section')?.scrollIntoView({ behavior: 'smooth' });
+                          }, 50);
                         }}
                         className="text-[11px] font-bold text-blue-700 hover:underline flex items-center space-x-1"
                       >
@@ -1323,128 +1339,151 @@ export default function App() {
               </div>
             </div>
 
-            {/* Pharmacokinetic Plasma Washout & 4-Step Taper Section */}
-            <div id="washout-section" className="grid grid-cols-1 lg:grid-cols-2 gap-6 scroll-mt-24">
-              {/* 5-Half-Life PK Washout SVG Plotter */}
-              <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    <h3 className="font-bold text-sm text-slate-900 flex items-center space-x-1.5">
-                      <Activity className="w-4 h-4 text-indigo-600" />
-                      <span>5-Half-Life Pharmacokinetic Plasma Washout Curve</span>
-                    </h3>
-                    <p className="text-xs text-slate-500">
-                      Target: <span className="font-semibold capitalize text-indigo-700">{activeWashoutDrug}</span>{' '}
-                      (t½ = {washoutProfile.halfLifeHours}h)
-                    </p>
-                  </div>
-                  <span className="text-xs font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">
-                    C(t) = 100 × (0.5)^(t/t½)
+            {/* Pharmacokinetic Plasma Washout & 4-Step Taper Section (Collapsible) */}
+            <div id="washout-section" className="bg-slate-50/70 border border-slate-200/90 rounded-xl p-4 transition-all scroll-mt-24 shadow-sm">
+              <button
+                onClick={() => setShowPkDetails(!showPkDetails)}
+                className="w-full flex items-center justify-between text-left group"
+              >
+                <div className="flex flex-wrap items-center gap-2">
+                  <Activity className="w-4 h-4 text-indigo-600" />
+                  <span className="font-bold text-sm text-slate-800">
+                    Pharmacokinetic Elimination Washout Curve &amp; 4-Step Hyperbolic Taper
+                  </span>
+                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">
+                    Target: {activeWashoutDrug.toUpperCase()} ({washoutProfile.halfLifeHours}h t½)
                   </span>
                 </div>
-
-                {/* Washout SVG Plot */}
-                <div className="w-full h-48 bg-slate-50 border border-slate-200 rounded-lg p-2 relative flex items-center justify-center">
-                  <svg viewBox="0 0 450 180" className="w-full h-full select-none">
-                    {/* Grid Lines */}
-                    {[0, 25, 50, 75, 100].map(pct => {
-                      const y = 150 - (pct / 100) * 125;
-                      return (
-                        <g key={pct}>
-                          <line x1="45" y1={y} x2="420" y2={y} stroke="#E2E8F0" strokeWidth="1" />
-                          <text x="35" y={y + 3} textAnchor="end" fontSize="9" fill="#94A3B8">
-                            {pct}%
-                          </text>
-                        </g>
-                      );
-                    })}
-
-                    {/* Time Half-Lives Marks (0 to 5 t1/2) */}
-                    {[0, 1, 2, 3, 4, 5].map(hl => {
-                      const x = 50 + (hl / 5) * 360;
-                      return (
-                        <g key={hl}>
-                          <line x1={x} y1="20" x2={x} y2="150" stroke="#E2E8F0" strokeWidth="1" strokeDasharray="2 2" />
-                          <text x={x} y="165" textAnchor="middle" fontSize="9" fill="#64748B" fontWeight="600">
-                            {hl} t½
-                          </text>
-                        </g>
-                      );
-                    })}
-
-                    {/* Washout Curve Path */}
-                    {(() => {
-                      const points: string[] = [];
-                      for (let step = 0; step <= 50; step++) {
-                        const hl = (step / 50) * 5;
-                        const pct = 100 * Math.pow(0.5, hl);
-                        const x = 50 + (hl / 5) * 360;
-                        const y = 150 - (pct / 100) * 125;
-                        points.push(`${x},${y}`);
-                      }
-                      return (
-                        <polyline
-                          fill="none"
-                          stroke="#4F46E5"
-                          strokeWidth="3"
-                          strokeLinecap="round"
-                          points={points.join(' ')}
-                        />
-                      );
-                    })()}
-
-                    {/* 5-Half-Life 96.88% Washout Point Marker */}
-                    <circle cx="410" cy="146" r="5" fill="#10B981" stroke="#FFFFFF" strokeWidth="2" />
-                    <text x="405" y="135" textAnchor="end" fontSize="9" fontWeight="bold" fill="#059669">
-                      3.13% Residual (5 t½ Washout)
-                    </text>
-                  </svg>
+                <div className="flex items-center space-x-1.5 text-xs font-semibold text-indigo-600 group-hover:text-indigo-800">
+                  <span>{showPkDetails ? 'Hide Washout Protocol' : 'Inspect Washout & Taper'}</span>
+                  {showPkDetails ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </div>
-                <div className="mt-3 flex items-center justify-between text-xs text-slate-500">
-                  <span>Full biological clearance achieved in ~{(washoutProfile.halfLifeHours * 5) / 24} days.</span>
-                  <span className="font-semibold text-slate-700">Taper Required: {washoutProfile.requiresTaper ? 'YES' : 'NO'}</span>
-                </div>
-              </div>
+              </button>
 
-              {/* 4-Step Hyperbolic Tapering Schedule Table */}
-              <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-bold text-sm text-slate-900 flex items-center space-x-1.5">
-                      <Shield className="w-4 h-4 text-emerald-600" />
-                      <span>Physician-Guided 4-Step Tapering Schedule</span>
-                    </h3>
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
-                      Hyperbolic Protocol
-                    </span>
-                  </div>
-                  <div className="space-y-2">
-                    {taperSteps.map((step, idx) => (
-                      <div
-                        key={idx}
-                        className="p-2.5 rounded-lg border border-slate-100 bg-slate-50/70 flex items-center justify-between text-xs"
-                      >
-                        <div className="flex items-center space-x-3">
-                          <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-800 font-extrabold flex items-center justify-center text-xs">
-                            {idx + 1}
-                          </span>
-                          <div>
-                            <span className="font-bold text-slate-900">{step.weeks}</span>
-                            <p className="text-[11px] text-slate-600">{step.instruction}</p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <span className="font-extrabold text-blue-700">{step.doseMg} mg</span>
-                          <span className="block text-[10px] text-slate-400">({step.pct}% dose)</span>
-                        </div>
+              {showPkDetails && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4 pt-4 border-t border-slate-200">
+                  {/* 5-Half-Life PK Washout SVG Plotter */}
+                  <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <h3 className="font-bold text-sm text-slate-900 flex items-center space-x-1.5">
+                          <Activity className="w-4 h-4 text-indigo-600" />
+                          <span>5-Half-Life Pharmacokinetic Plasma Washout Curve</span>
+                        </h3>
+                        <p className="text-xs text-slate-500">
+                          Target: <span className="font-semibold capitalize text-indigo-700">{activeWashoutDrug}</span>{' '}
+                          (t½ = {washoutProfile.halfLifeHours}h)
+                        </p>
                       </div>
-                    ))}
+                      <span className="text-xs font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">
+                        C(t) = 100 × (0.5)^(t/t½)
+                      </span>
+                    </div>
+
+                    {/* Washout SVG Plot */}
+                    <div className="w-full h-48 bg-slate-50 border border-slate-200 rounded-lg p-2 relative flex items-center justify-center">
+                      <svg viewBox="0 0 450 180" className="w-full h-full select-none">
+                        {/* Grid Lines */}
+                        {[0, 25, 50, 75, 100].map(pct => {
+                          const y = 150 - (pct / 100) * 125;
+                          return (
+                            <g key={pct}>
+                              <line x1="45" y1={y} x2="420" y2={y} stroke="#E2E8F0" strokeWidth="1" />
+                              <text x="35" y={y + 3} textAnchor="end" fontSize="9" fill="#94A3B8">
+                                {pct}%
+                              </text>
+                            </g>
+                          );
+                        })}
+
+                        {/* Time Half-Lives Marks (0 to 5 t1/2) */}
+                        {[0, 1, 2, 3, 4, 5].map(hl => {
+                          const x = 50 + (hl / 5) * 360;
+                          return (
+                            <g key={hl}>
+                              <line x1={x} y1="20" x2={x} y2="150" stroke="#E2E8F0" strokeWidth="1" strokeDasharray="2 2" />
+                              <text x={x} y="165" textAnchor="middle" fontSize="9" fill="#64748B" fontWeight="600">
+                                {hl} t½
+                              </text>
+                            </g>
+                          );
+                        })}
+
+                        {/* Washout Curve Path */}
+                        {(() => {
+                          const points: string[] = [];
+                          for (let step = 0; step <= 50; step++) {
+                            const hl = (step / 50) * 5;
+                            const pct = 100 * Math.pow(0.5, hl);
+                            const x = 50 + (hl / 5) * 360;
+                            const y = 150 - (pct / 100) * 125;
+                            points.push(`${x},${y}`);
+                          }
+                          return (
+                            <polyline
+                              fill="none"
+                              stroke="#4F46E5"
+                              strokeWidth="3"
+                              strokeLinecap="round"
+                              points={points.join(' ')}
+                            />
+                          );
+                        })()}
+
+                        {/* 5-Half-Life 96.88% Washout Point Marker */}
+                        <circle cx="410" cy="146" r="5" fill="#10B981" stroke="#FFFFFF" strokeWidth="2" />
+                        <text x="405" y="135" textAnchor="end" fontSize="9" fontWeight="bold" fill="#059669">
+                          3.13% Residual (5 t½ Washout)
+                        </text>
+                      </svg>
+                    </div>
+                    <div className="mt-3 flex items-center justify-between text-xs text-slate-500">
+                      <span>Full biological clearance achieved in ~{(washoutProfile.halfLifeHours * 5) / 24} days.</span>
+                      <span className="font-semibold text-slate-700">Taper Required: {washoutProfile.requiresTaper ? 'YES' : 'NO'}</span>
+                    </div>
+                  </div>
+
+                  {/* 4-Step Hyperbolic Tapering Schedule Table */}
+                  <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="font-bold text-sm text-slate-900 flex items-center space-x-1.5">
+                          <Shield className="w-4 h-4 text-emerald-600" />
+                          <span>Physician-Guided 4-Step Tapering Schedule</span>
+                        </h3>
+                        <span className="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
+                          Hyperbolic Protocol
+                        </span>
+                      </div>
+                      <div className="space-y-2">
+                        {taperSteps.map((step, idx) => (
+                          <div
+                            key={idx}
+                            className="p-2.5 rounded-lg border border-slate-100 bg-slate-50/70 flex items-center justify-between text-xs"
+                          >
+                            <div className="flex items-center space-x-3">
+                              <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-800 font-extrabold flex items-center justify-center text-xs">
+                                {idx + 1}
+                              </span>
+                              <div>
+                                <span className="font-bold text-slate-900">{step.weeks}</span>
+                                <p className="text-[11px] text-slate-600">{step.instruction}</p>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <span className="font-extrabold text-blue-700">{step.doseMg} mg</span>
+                              <span className="block text-[10px] text-slate-400">({step.pct}% dose)</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <p className="mt-3 text-[11px] text-slate-500 italic">
+                      Note: Hyperbolic dose reductions preserve occupancy-linear muscarinic/dopaminergic receptor clearance to prevent acute withdrawal.
+                    </p>
                   </div>
                 </div>
-                <p className="mt-3 text-[11px] text-slate-500 italic">
-                  Note: Hyperbolic dose reductions preserve occupancy-linear muscarinic/dopaminergic receptor clearance to prevent acute withdrawal.
-                </p>
-              </div>
+              )}
             </div>
           </div>
         )}

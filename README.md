@@ -55,105 +55,17 @@ Polypharmacy in aging populations represents a significant source of preventable
 
 ## System Architecture
 
-```mermaid
-graph LR
-    subgraph INPUTS ["1. Clinical Ingestion"]
-        A["Patient Demographics & Vitals"] --> D["Deterministic Engine"]
-        B["Structured Medication Regimen"] --> D
-        C["Clinical Note NLP Pipeline<br/>(Brand-to-Generic Normalization)"] --> D
-    end
-
-    subgraph FED_REST ["2. Federated Federal Intelligence"]
-        E["NLM RxNorm Concept Resolver<br/>(rxcui.json)"]
-        F["NLM RxClass Therapeutic Categories<br/>(byRxcui.json)"]
-        G["FDA FAERS Adverse Event Counter<br/>(event.json count=6)"]
-        H["Offline Reference Drug Profile<br/>(Zero-Latency Failover)"]
-        E -.-> H
-        F -.-> H
-        G -.-> H
-    end
-
-    subgraph CORE_ENGINE ["3. CascadeShield Rx Core Engine"]
-        D --> I["Cockcroft-Gault CrCl Engine<br/>(Sarcopenia Floor Clamping)"]
-        D --> J["Chronological DAG Cascade Matcher<br/>(12 BMJ/ThinkCascades Rules)"]
-        D --> K["Beers Table 2 & Table 6 Renal Guard"]
-        D --> L["Discharge Reconciliation Engine<br/>(Duplications & START v3 Omissions)"]
-        H --> D
-    end
-
-    subgraph OUTPUTS ["4. Actionable Clinical Deliverables"]
-        J --> M["Interactive SVG Causal Graph<br/>(Directed Acyclic Graph)"]
-        J --> N["Counterfactual Deprescribing Simulator<br/>(Breadth-First Search)"]
-        N --> O["Pharmacokinetic Washout Modeler &<br/>Hyperbolic Taper Schedule"]
-        D --> P["Polypharmacy Harm Index (PHI: 0-100)<br/>& Comparative Risk Deltas"]
-        D --> Q["HL7 FHIR R4 Clinical Bundle<br/>(Patient, MedStatement, DetectedIssue)"]
-        D --> R["Clinical Handoff Brief<br/>(@media print formatted)"]
-    end
-
-    style INPUTS fill:#0F172A,stroke:#38BDF8,stroke-width:1.5px,color:#F8FAFC
-    style FED_REST fill:#1E293B,stroke:#818CF8,stroke-width:1.5px,color:#F8FAFC
-    style CORE_ENGINE fill:#064E3B,stroke:#34D399,stroke-width:1.5px,color:#F8FAFC
-    style OUTPUTS fill:#1E1B4B,stroke:#C084FC,stroke-width:1.5px,color:#F8FAFC
-```
+<div align="center">
+  <img src="public/architecture-diagram.svg" width="100%" alt="CascadeShield Rx System Architecture" />
+</div>
 
 ---
 
 ## Dual-Mode Full-Stack Backend Architecture and Federal Telemetry
 
-CascadeShield Rx implements a dual-mode full-stack backend architecture engineered to operate across local Node.js development, Vercel Serverless, and static hosting environments (such as GitHub Pages) with zero routing failures.
+CascadeShield Rx is engineered to operate seamlessly across both full-stack Node.js environments and static edge deployments (such as GitHub Pages) with zero routing failures.
 
-```mermaid
-flowchart TD
-    subgraph CLIENT ["Client Layer (Browser Runtime)"]
-        UI["CascadeShield Rx User Interface<br/>(React 18 + TypeScript + Vite 6)"]
-        GW["Hybrid Backend Gateway<br/>(src/engine/backendClient.ts)"]
-        UI --> GW
-    end
-
-    subgraph RUNTIMES ["Execution Runtimes (Dual-Mode)"]
-        direction TB
-        subgraph LOCAL_SERVER ["Local Node.js & Serverless Runtime"]
-            SRV["Node.js REST Server (server/clinicalServer.mjs)<br/>Port 8787 | Native node:http & node:crypto"]
-            VCL["Vercel Serverless Function (api/clinical-audit.ts)"]
-            EP1["GET /api/health"]
-            EP2["POST /api/clinical-audit"]
-            EP3["POST /api/fhir-r4"]
-            SRV --- EP1 & EP2 & EP3
-        end
-
-        subgraph EDGE_FALLBACK ["Static Hosting Runtime (GitHub Pages)"]
-            WORKER["Hybrid Browser Edge Worker<br/>(Zero-404 Automatic Failover)"]
-            CRYPTO["Web Crypto Digital Signer<br/>(Native SHA-256 Signature)"]
-            STORAGE[("Persistent Audit Store<br/>(localStorage / IndexedDB)")]
-            WORKER --> CRYPTO
-            WORKER --> STORAGE
-        end
-    end
-
-    subgraph FEDERAL ["U.S. Federal REST Drug Data Infrastructure"]
-        direction LR
-        RXNORM["NIH NLM RxNorm<br/>(Concept Identifier Resolver)"]
-        RXCLASS["NIH NLM RxClass<br/>(Mechanism of Action & Class)"]
-        FAERS["US FDA OpenFDA<br/>(FAERS Real-World Events)"]
-    end
-
-    GW -->|"Primary REST Call (Local / Vercel)"| LOCAL_SERVER
-    GW -->|"Automatic Static Host Failover"| EDGE_FALLBACK
-    EDGE_FALLBACK -->|"Live Parallel REST Queries (2000ms AbortController)"| FEDERAL
-    LOCAL_SERVER -->|"Server-Side Federal Queries"| FEDERAL
-
-    classDef client fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
-    classDef server fill:#1e1b4b,stroke:#818cf8,stroke-width:1.5px,color:#f8fafc;
-    classDef edge fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#f8fafc;
-    classDef fed fill:#1e293b,stroke:#94a3b8,stroke-width:1.5px,color:#f8fafc;
-
-    class UI,GW client;
-    class SRV,VCL,EP1,EP2,EP3 server;
-    class WORKER,CRYPTO,STORAGE edge;
-    class RXNORM,RXCLASS,FAERS fed;
-```
-
-### Backend Components and Interfaces
+### Architecture Pillars
 
 1. **Standalone Node.js REST Backend Server (`server/clinicalServer.mjs`)**:
    - Zero external runtime dependencies: Built using native `node:http` and `node:crypto`.

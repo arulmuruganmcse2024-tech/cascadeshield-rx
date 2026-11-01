@@ -76,7 +76,7 @@ export const PATIENT_PRESETS: PatientPreset[] = [
     simulationButtons: [
       {
         id: 'btn_martha_substitute',
-        label: '✂️ Simulate Root Substitution: Amlodipine 10 mg → Losartan 50 mg',
+        label: 'Simulate Root Substitution: Amlodipine 10 mg → Losartan 50 mg',
         actionType: 'ROOT_SUBSTITUTION',
         rootDrugGeneric: 'amlodipine',
         substituteGeneric: 'losartan',
@@ -159,7 +159,7 @@ export const PATIENT_PRESETS: PatientPreset[] = [
     simulationButtons: [
       {
         id: 'btn_arthur_sever_statin',
-        label: '✂️ Step 1: Sever Statin Cascade Only',
+        label: 'Step 1: Sever Statin Cascade Only',
         actionType: 'SEVER_STATIN',
         rootDrugGeneric: 'atorvastatin',
         substituteGeneric: 'pravastatin',
@@ -170,7 +170,7 @@ export const PATIENT_PRESETS: PatientPreset[] = [
       },
       {
         id: 'btn_arthur_full_optimization',
-        label: '🛡️ Step 2: Full Regimen & Renal Optimization',
+        label: 'Step 2: Full Regimen & Renal Optimization',
         actionType: 'FULL_OPTIMIZATION',
         description: 'Taper off Baclofen (Beers Table 6 contraindication < 60 mL/min) and renally adjust/discontinue Ciprofloxacin to eliminate nephrotoxicity.'
       }
@@ -296,7 +296,7 @@ export const PATIENT_PRESETS: PatientPreset[] = [
     simulationButtons: [
       {
         id: 'btn_eleanor_reconcile',
-        label: '✅ Execute Discharge Reconciliation & Deprescribing',
+        label: 'Execute Discharge Reconciliation & Deprescribing',
         actionType: 'EXECUTE_RECONCILIATION',
         description: 'Stop duplicate Metoprolol Tartrate (maintain Toprol-XL 100 mg), restart omitted Jardiance 10 mg, convert iron to alternate-day dosing, taper off Prednisone + Quetiapine, and discontinue Senna + Loperamide.'
       }
@@ -344,7 +344,7 @@ export const PATIENT_PRESETS: PatientPreset[] = [
     simulationButtons: [
       {
         id: 'btn_custom_substitute',
-        label: '✂️ Simulate Root Deprescribing',
+        label: 'Simulate Root Deprescribing',
         actionType: 'ROOT_SUBSTITUTION',
         rootDrugGeneric: 'amlodipine',
         substituteGeneric: 'losartan',
