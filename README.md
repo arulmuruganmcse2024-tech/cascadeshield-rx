@@ -20,6 +20,14 @@
 
 ---
 
+**Demo Video**
+
+<a href="https://youtu.be/TKgBf1-wQUY" target="_blank" rel="noopener noreferrer">
+  <img src="https://img.youtube.com/vi/TKgBf1-wQUY/hqdefault.jpg" width="100%" alt="CascadeShield Rx Demo Video" />
+</a>
+
+---
+
 ## Reviewer Navigation Guide
 
 | Resource | Direct Link | Architectural and Clinical Notes |
