@@ -645,6 +645,18 @@ export default function App() {
               <Printer className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Print Brief</span>
             </button>
+
+            {/* Watch YouTube Demo Video */}
+            <a
+              href="https://youtu.be/TKgBf1-wQUY"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-red-600 hover:bg-red-700 text-white transition-all shadow-sm flex items-center space-x-1.5 cursor-pointer"
+              title="Watch Full Clinical Demonstration Video on YouTube (2:48)"
+            >
+              <Play className="w-3.5 h-3.5 fill-white text-white" />
+              <span className="hidden sm:inline">Watch Demo (2:48)</span>
+            </a>
           </div>
         </div>
       </header>
@@ -1732,6 +1744,35 @@ export default function App() {
         {/* ======================================================== */}
         {activeTab === 2 && (
           <div className="space-y-6">
+            {/* Clinical Demonstration Video Banner Card */}
+            <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-indigo-800/80 rounded-2xl p-5 text-white shadow-md relative overflow-hidden">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-5">
+                <div className="space-y-1.5 max-w-2xl">
+                  <div className="flex items-center space-x-2">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/40">
+                      OFFICIAL DEMO VIDEO
+                    </span>
+                    <span className="text-xs text-slate-300 font-medium">Duration: 2:48 • 1080p HD</span>
+                  </div>
+                  <h3 className="text-lg font-bold text-white tracking-tight">
+                    Watch the End-to-End Clinical Demonstration
+                  </h3>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Watch the live walkthrough of Martha V.&apos;s 4-drug domino cascade, Cockcroft-Gault renal protection, counterfactual BFS deprescribing simulation, pharmacokinetic elimination washout curve, and signed HL7 FHIR R4 clinical bundle export.
+                  </p>
+                </div>
+                <a
+                  href="https://youtu.be/TKgBf1-wQUY"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-5 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-extrabold text-sm transition-all shadow-lg flex items-center space-x-2.5 flex-shrink-0 cursor-pointer group hover:scale-[1.02]"
+                >
+                  <Play className="w-5 h-5 fill-white text-white group-hover:scale-110 transition-transform" />
+                  <span>Play Video (YouTube)</span>
+                </a>
+              </div>
+            </div>
+
             {/* 15 Automated Clinical Unit Tests Runner */}
             <div id="unit-tests-section" className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm scroll-mt-24">
               <div className="flex flex-wrap items-center justify-between gap-3 mb-4">

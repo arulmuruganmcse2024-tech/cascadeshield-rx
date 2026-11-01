@@ -1,6 +1,8 @@
 <div align="center">
 
-<img src="public/hero-banner.svg" alt="CascadeShield Rx Banner" width="100%" />
+<a href="https://youtu.be/TKgBf1-wQUY" target="_blank" rel="noopener noreferrer">
+  <img src="public/demo-video-banner.svg" alt="CascadeShield Rx Clinical Demonstration Video" width="100%" />
+</a>
 
 <br/><br/>
 
@@ -9,6 +11,7 @@
 [![Clinical Unit Tests](https://img.shields.io/badge/Clinical_Unit_Tests-15%2F15_Passing-059669)](https://github.com/arulmuruganmcse2024-tech/cascadeshield-rx)
 [![Clinical Standards](https://img.shields.io/badge/Standards-BMJ_2026_%7C_ThinkCascades_%7C_AGS_Beers_2025-7C3AED)](https://github.com/arulmuruganmcse2024-tech/cascadeshield-rx)
 [![HL7 FHIR R4](https://img.shields.io/badge/EHR_Interoperability-HL7_FHIR_R4-D97706)](https://github.com/arulmuruganmcse2024-tech/cascadeshield-rx)
+[![Demo Video](https://img.shields.io/badge/YouTube_Video-Watch_Demo_(2:48)-FF0000?logo=youtube&logoColor=white)](https://youtu.be/TKgBf1-wQUY)
 
 <br/>
 
@@ -20,11 +23,24 @@
 
 ---
 
+## Clinical Demonstration Video
+
+<div align="center">
+  <a href="https://youtu.be/TKgBf1-wQUY" target="_blank" rel="noopener noreferrer">
+    <img src="public/demo-video-banner.svg" alt="CascadeShield Rx Clinical Demonstration Video" width="100%" />
+  </a>
+</div>
+
+**Watch the demonstration video (2:48):** [https://youtu.be/TKgBf1-wQUY](https://youtu.be/TKgBf1-wQUY) &mdash; Clinical walkthrough illustrating the 4-drug domino cascade (Martha V.), Cockcroft-Gault renal protection with sarcopenia floor clamping, counterfactual BFS deprescribing simulation, pharmacokinetic plasma washout curve, and cryptographically signed HL7 FHIR R4 clinical bundle export.
+
+---
+
 ## Reviewer Navigation Guide
 
 | Resource | Direct Link | Architectural and Clinical Notes |
 | :--- | :--- | :--- |
 | **Live Production Web Application (GitHub Pages)** | [**https://arulmuruganmcse2024-tech.github.io/cascadeshield-rx/**](https://arulmuruganmcse2024-tech.github.io/cascadeshield-rx/) | Compiled with relative asset resolution (`base: './'`), zero-404 SPA fallback, responsive across desktop and tablet viewports. |
+| **Clinical Demonstration Video (YouTube)** | [**Watch Demo (2:48)**](https://youtu.be/TKgBf1-wQUY) | High-definition clinical walkthrough covering the 4 patient cohorts, causal DAG, BFS deprescribing, and live federal REST telemetry. |
 | **Live Clinical Evaluation Environment** | [Open Evaluation App](https://arulmuruganmcse2024-tech.github.io/cascadeshield-rx/) | Direct initialization into Patient Cohort 1 (Martha V.) with active directed acyclic graph (DAG) visualization. No authentication barrier. |
 | **Clinical Evaluation Protocol (3-Step Walkthrough)** | Top Navigation Bar | Step-by-step clinical scenario: (1) Baseline Cascade Identification, (2) Counterfactual Root Substitution (PHI 92 to 12), (3) Algorithmic Verification. |
 | **Automated Clinical Unit Tests (15 Assertions)** | Workspace Tab 3 | 15 / 15 assertions passing in sub-millisecond execution, validating pharmacokinetic, mathematical, and algorithmic bounds. |
