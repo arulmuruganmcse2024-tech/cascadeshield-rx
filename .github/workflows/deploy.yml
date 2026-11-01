@@ -27,6 +27,8 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm install
+      - name: Verify Node.js Clinical Backend REST API (GET /api/health & POST /api/clinical-audit)
+        run: npm run test:backend
       - name: Build production bundle
         run: npm run build
       - name: Copy index.html to 404.html for SPA fallback
@@ -46,3 +48,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+

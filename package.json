@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "node server/clinicalServer.mjs",
+    "test:backend": "node server/verifyBackend.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",

@@ -2,6 +2,7 @@
 // Vercel Node.js Serverless REST Endpoint for CascadeShield Rx Clinical Audit & HL7 FHIR R4 Generation
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import crypto from 'node:crypto';
 
 // Cockcroft-Gault Calculation
 function calcCrCl(vitals: any): number {
@@ -248,9 +249,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ]
     };
 
+    const rawAuditEnvelope = JSON.stringify({ vitals, crcl, phi, acbTotal, cascadeScores, fhirBundle });
+    const sha256_integrity_hash = crypto.createHash('sha256').update(rawAuditEnvelope).digest('hex');
+
     res.setHeader('Cache-Control', 's-maxage=86400, stale-while-revalidate');
+    res.setHeader('X-Audit-Signature', sha256_integrity_hash);
     return res.status(200).json({
       auditStatus: 'SUCCESS',
+      auditId: `audit_${crypto.randomBytes(6).toString('hex')}`,
+      sha256_integrity_hash,
+      timestamp: new Date().toISOString(),
       analytics: {
         crcl,
         phi,

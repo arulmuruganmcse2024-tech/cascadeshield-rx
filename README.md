@@ -5,10 +5,11 @@
 <br/><br/>
 
 [![Hackathon](https://img.shields.io/badge/Next_Byte_Hacks_V5-Flagship_Submission-2563EB?style=for-the-badge)](https://github.com/arulmuruganmcse2024-tech/cascadeshield-rx)
+[![Full-Stack Backend](https://img.shields.io/badge/Full--Stack_Backend-Node.js_REST_%2B_Vercel_Serverless-4338CA?style=for-the-badge)](https://github.com/arulmuruganmcse2024-tech/cascadeshield-rx)
+[![CI/CD Pipeline](https://img.shields.io/badge/CI%2FCD-GitHub_Actions_Pages_Deploy-16A34A?style=for-the-badge)](https://github.com/arulmuruganmcse2024-tech/cascadeshield-rx/actions)
 [![Unit Tests](https://img.shields.io/badge/Clinical_Unit_Tests-15%2F15_PASSED_(100%25)-059669?style=for-the-badge)](https://github.com/arulmuruganmcse2024-tech/cascadeshield-rx)
 [![Clinical Standards](https://img.shields.io/badge/Standards-BMJ_2026_%7C_ThinkCascades_%7C_Beers_2025-7C3AED?style=for-the-badge)](https://github.com/arulmuruganmcse2024-tech/cascadeshield-rx)
-[![Interoperability](https://img.shields.io/badge/EHR_Export-HL7_FHIR_R4_Bundle-D97706?style=for-the-badge)](https://github.com/arulmuruganmcse2024-tech/cascadeshield-rx)
-[![Privacy](https://img.shields.io/badge/Architecture-Zero--Login_Offline--First-0D9488?style=for-the-badge)](https://github.com/arulmuruganmcse2024-tech/cascadeshield-rx)
+[![Interoperability](https://img.shields.io/badge/EHR_Export-HL7_FHIR_R4_SHA--256-D97706?style=for-the-badge)](https://github.com/arulmuruganmcse2024-tech/cascadeshield-rx)
 
 <br/>
 
@@ -28,6 +29,7 @@
 | 🛡️ **Zero-Barrier Instant Verification** | [Open Live App](https://arulmuruganmcse2024-tech.github.io/cascadeshield-rx/) | **Zero Login / Zero API Key walls.** Boots straight into Case 1 (Martha V.) with interactive DAG active. |
 | 🎯 **Judge 30-Second Quick-Tour** | Top of the screen | 3 interactive step buttons: ① Inspect 4-Drug Cascade $\rightarrow$ ② Simulate Root Switch ($\text{PHI } 92 \rightarrow 12$) $\rightarrow$ ③ Verify 15/15 Unit Tests &amp; FHIR R4. |
 | 🧪 **15 Automated Unit Tests** | Workspace Tab 3 | **15 / 15 PASSED in &lt; 1ms.** Mathematical, pharmacologic, and algorithmic assertions verified. |
+| 🖥️ **Full-Stack REST Backend & Telemetry** | Tab 3 &amp; `server/` | Dual-mode: Standalone Node.js REST API (`npm run server`), Vercel serverless, and browser edge worker + live US Federal API pings with Web Crypto SHA-256 signing. |
 | 📦 **HL7 FHIR R4 Bundle Export** | Top Bar &amp; Tab 3 | 1-Click JSON export of official US-Core `Patient`, `Observation`, `MedicationStatement`, and `DetectedIssue` resources. |
 | 🖨️ **1-Page Clinical Brief** | Top Bar | Native `@media print` formatted physician handoff sheet with checkboxes and attestation lines. |
 
@@ -91,6 +93,76 @@ graph LR
     style CORE_ENGINE fill:#064E3B,stroke:#34D399,stroke-width:2px,color:#F8FAFC
     style OUTPUTS fill:#1E1B4B,stroke:#C084FC,stroke-width:2px,color:#F8FAFC
 ```
+
+---
+
+## 🖥️ Dual-Mode Full-Stack Backend Architecture & US Federal Telemetry
+
+CascadeShield Rx implements a production-grade **3-Tier Full-Stack Architecture** engineered to operate seamlessly across local development, Vercel Serverless, and static hosting environments (e.g. GitHub Pages) with **zero 404 errors**:
+
+```
+                       ┌────────────────────────────────────────────────────────┐
+                       │               CascadeShield Rx Client                  │
+                       │           (Vite 6 + React 18 + TypeScript)             │
+                       └──────────────────────────┬─────────────────────────────┘
+                                                  │
+                                                  ▼
+                               ┌─────────────────────────────────────┐
+                               │     src/engine/backendClient.ts     │
+                               │   (Zero-404 Hybrid Gateway Client)  │
+                               └──────────────────┬──────────────────┘
+                                                  │
+            ┌─────────────────────────────────────┴─────────────────────────────────────┐
+            │ [Environment: Local Dev / Node CLI]                                       │ [Environment: Static GitHub Pages]
+            ▼                                                                           ▼
+┌───────────────────────────────────────┐                               ┌────────────────────────────────────────┐
+│   server/clinicalServer.mjs           │                               │   Hybrid Browser Edge Worker           │
+│   • Node.js REST API on port 8787     │                               │   • Native Web Crypto SHA-256 Signer   │
+│   • GET /api/health                   │                               │   • Zero-404 Client-Side Fallback      │
+│   • POST /api/clinical-audit          │                               │   • Persistent Audit Database          │
+│   • POST /api/fhir-r4                 │                               │     (Retains 25 Latest Runs in LocalDB)│
+│   • SHA-256 Crypto Hashing (Node)     │                               └──────────────────┬─────────────────────┘
+└───────────────────────────────────────┘                                                  │
+                                                                                           │ Parallel REST Telemetry
+                                                                                           ▼
+                                                        ┌────────────────────────────────────────────────────────┐
+                                                        │         3 Live Keyless U.S. Federal Endpoints         │
+                                                        │  1. NIH NLM RxNorm (rxnav.nlm.nih.gov)                │
+                                                        │  2. NIH NLM RxClass (rxclass/class/byRxcui.json)      │
+                                                        │  3. US FDA OpenFDA FAERS (api.fda.gov/drug/event.json) │
+                                                        └────────────────────────────────────────────────────────┘
+```
+
+### Full-Stack Backend Components
+
+1. **Standalone Node.js REST Backend Server (`server/clinicalServer.mjs`)**:
+   - Zero external runtime dependencies: Built strictly with native `node:http` and `node:crypto`.
+   - Listens on `http://localhost:8787` and exposes:
+     - `GET /api/health`: Health status, version metadata, and validated clinical consensus standards.
+     - `POST /api/clinical-audit`: Evaluates CrCl, Anticholinergic Burden (ACB), Drug Burden Index (DBI), Beers Criteria, prescribing cascades, and signs the resulting payload with a 64-character SHA-256 hash.
+     - `POST /api/fhir-r4`: Converts any patient regimen into an official US-Core HL7 FHIR R4 Bundle.
+     - `POST /api/nlp-parse`: Server-side extraction of medication brand synonyms and dosage schedules.
+   - Run locally: `npm run server`
+
+2. **Automated CI/CD Backend Verifier (`server/verifyBackend.mjs`)**:
+   - Automatically tested on every Git push via GitHub Actions (`.github/workflows/deploy.yml`).
+   - Spawns the Node.js server on an ephemeral port, verifies `GET /api/health` 200 OK, submits a full clinical audit payload to `POST /api/clinical-audit`, and asserts exact values:
+     - Martha V. Creatinine Clearance: `32.4 mL/min`
+     - Harm Index: `92/100` (4 cascade chains detected)
+     - Valid 64-char hex SHA-256 signature generated and verified.
+   - Run locally: `npm run test:backend`
+
+3. **Vercel Serverless Function (`api/clinical-audit.ts`)**:
+   - Production serverless function returning `X-Audit-Signature` and `sha256_integrity_hash` for automated cloud deployments on Vercel.
+
+4. **Zero-404 Hybrid Gateway (`src/engine/backendClient.ts`)**:
+   - Probes for local Node.js server and Vercel endpoints.
+   - On static environments like GitHub Pages, seamlessly switches to the high-performance browser Edge Worker that queries the 3 U.S. Federal REST APIs in parallel, signs the FHIR bundle with the browser's native `window.crypto.subtle` API, and persists the audit in local storage.
+
+5. **Interactive Live Backend Telemetry Console (Workspace Tab 3)**:
+   - **Button A (`⚡ Execute POST /api/clinical-audit`)**: Triggers real-time audit execution, displaying round-trip latency, execution mode, SHA-256 hash, and metric deltas.
+   - **Button B (`🌐 Ping US Federal APIs`)**: Live telemetry monitor querying NIH RxNorm, NIH RxClass, and FDA OpenFDA FAERS with round-trip millisecond gauges.
+   - **Persistent Audit Database**: Logs up to 25 verified clinical runs with timestamps, patient vitals, and cryptographic hash verification.
 
 ---
 
@@ -175,11 +247,17 @@ cd cascadeshield-rx
 # 2. Install dependencies
 npm install
 
-# 3. Start local development server
+# 3. Verify Node.js Full-Stack REST Backend & Clinical Assertions
+npm run test:backend
+
+# 4. (Optional) Run Standalone Node.js REST API Server on port 8787
+npm run server
+
+# 5. Start local Vite development server
 npm run dev
 # -> Opens http://localhost:3000
 
-# 4. Run TypeScript check & production build
+# 6. Run TypeScript check & production build
 npm run build
 ```
 
